@@ -1,8 +1,22 @@
 package ru.stacy.object;
 
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+
 public class User {
+    public User() {}
+
+    public User(String name) {
+        super();
+        this.name = name;
+    }
+
+    @Size(min = 6, message = "{name.size.error}")
     private String name;
+
+    @Size(min = 5, max = 10, message = "{password.size.error}")
     private String password;
+
     private boolean admin;
 
     public String getName() {
