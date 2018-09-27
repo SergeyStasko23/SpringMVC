@@ -34,7 +34,7 @@ public class LoginController {
         modelAndView.addObject("locale", messageSource.getMessage("locale", new String[] {locale.getDisplayName(locale)}, locale));
 
         if(bindingResult.hasErrors()) {
-           modelAndView.setViewName("login");
+            modelAndView.setViewName("login");
         } else {
             modelAndView.setViewName("main");
         }
