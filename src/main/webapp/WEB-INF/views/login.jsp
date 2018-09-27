@@ -31,9 +31,9 @@
 
         <footer>
             <form:checkbox path="admin"/>
-            <form:label path="admin">Admin</form:label>
+            <form:label path="admin"><spring:message code="admin"/></form:label>
 
-            <input type="submit" class="btnLogin" value="login" tabindex="4">
+            <input type="submit" class="btnLogin" value="<spring:message code="login"/>" tabindex="4">
         </footer>
     </form:form>
 </body>

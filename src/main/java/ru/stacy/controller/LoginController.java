@@ -1,9 +1,12 @@
 package ru.stacy.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,21 +14,32 @@ import ru.stacy.object.User;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 public class LoginController {
+    @Autowired
+    private MessageSource messageSource;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView main(HttpSession session) {
-        return new ModelAndView("login", "user", new User());
+    public String main(@ModelAttribute User user, HttpSession session, Locale locale) {
+        System.out.println(locale.getDisplayLanguage());
+        System.out.println(messageSource.getMessage("locale", new String[] {locale.getDisplayName(locale)}, locale));
+        return "login";
     }
 
     @RequestMapping(value = "/check-user", method = RequestMethod.POST)
-    public String checkUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+    public ModelAndView checkUser(Locale locale, @Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model, ModelMap modelMap) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("locale", messageSource.getMessage("locale", new String[] {locale.getDisplayName(locale)}, locale));
+
         if(bindingResult.hasErrors()) {
-            return "login";
+           modelAndView.setViewName("login");
+        } else {
+            modelAndView.setViewName("main");
         }
 
-        return "main";
+        return modelAndView;
     }
 
     // http://localhost:8087/get-json-user/alex/true
