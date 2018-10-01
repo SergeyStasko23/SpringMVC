@@ -10,6 +10,8 @@
     <p>Admin ${user.admin}</p>
     <p>Locale ${locale} </p>
 
+    <h3><a href="downloadPDF">Download PDF-document</a></h3>
+
     <form:form method="POST" action="/upload-file" enctype="multipart/form-data" modelAttribute="uploadedFile">
         <table>
             <tr>

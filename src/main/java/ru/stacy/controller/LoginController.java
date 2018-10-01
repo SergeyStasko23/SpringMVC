@@ -18,8 +18,38 @@ import java.util.Locale;
 
 @Controller
 public class LoginController {
+    public LoginController() {}
+
+    private static final int WEAK_STRENGTH = 1;
+    private static final int FEAR_STRENGTH = 5;
+    private static final int STRONG_STRENGTH = 7;
+
+    private static final String WEAK_COLOR = "#FF0000";
+    private static final String FEAR_COLOR = "#FF9900";
+    private static final String STRENGTH_COLOR = "#0099CC";
+
     @Autowired
     private MessageSource messageSource;
+
+    @ModelAttribute
+    public User createNewUser() {
+        return new User();
+    }
+
+    @RequestMapping(value = "/check-strength", method = RequestMethod.GET, produces = {"text/html; charset=UTF-8"})
+    public @ResponseBody String checkStrength(@RequestParam String password) {
+        String result = "<span style=\"color:%s; font-weight: bold;\">%s</span>";
+
+        if(password.length() >= WEAK_STRENGTH & password.length() < FEAR_STRENGTH) {
+            return String.format(result, WEAK_COLOR, "Слабый");
+        } else if(password.length() >= FEAR_STRENGTH & password.length() < STRONG_STRENGTH) {
+            return String.format(result, FEAR_COLOR, "Средний");
+        } else if(password.length() >= STRONG_STRENGTH) {
+            return String.format(result, STRENGTH_COLOR, "Сильный");
+        }
+        return "";
+    }
+
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String main(@ModelAttribute User user, HttpSession session, Locale locale) {
@@ -40,6 +70,11 @@ public class LoginController {
         }
 
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/downloadPDF", method = RequestMethod.GET)
+    public ModelAndView downloadPDF() {
+        return new ModelAndView("pdfView");
     }
 
     // http://localhost:8087/get-json-user/alex/true

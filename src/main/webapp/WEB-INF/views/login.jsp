@@ -11,6 +11,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="<c:url value="/resources/css/home.css"/>" rel="stylesheet">
     <title>Document</title>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function doAjax() {
+            $.ajax({
+                url: 'check-strength',
+                data: ({password : $('#password').val()}),
+                success: function (data) {
+                    $('#strengthValue').html(data);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <form:form method="post" modelAttribute="user" action="check-user" class="boxLogin">
@@ -25,8 +38,9 @@
             <form:errors path="name" cssClass="error"/>
 
             <form:label path="password"><spring:message code="password"/></form:label>
-            <form:input path="password"/>
+            <form:password path="password" onkeyup="doAjax()"/>
             <form:errors path="password" cssClass="error"/>
+            <span style="float: right" id="strengthValue"></span>
         </fieldset>
 
         <footer>
